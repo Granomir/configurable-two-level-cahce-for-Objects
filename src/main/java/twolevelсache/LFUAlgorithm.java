@@ -11,7 +11,7 @@ public class LFUAlgorithm implements CachingAlgorithm {
 
     private final Logger logger = LoggerFactory.getLogger(TwoLevelCacheImpl.class);
 
-    public LFUAlgorithm() {
+    LFUAlgorithm() {
         numberOfUsagesMap = new HashMap<>();
     }
 

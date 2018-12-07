@@ -12,7 +12,7 @@ public class LRUAlgorithm implements CachingAlgorithm {
 
     private final Logger logger = LoggerFactory.getLogger(TwoLevelCacheImpl.class);
 
-    public LRUAlgorithm() {
+    LRUAlgorithm() {
         lastTimeOfUsageMap = new HashMap<>();
     }
 

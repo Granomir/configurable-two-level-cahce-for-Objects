@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -17,11 +14,11 @@ public class MEMORYCache implements Cache {
     private Map<String, String> cache;
     private Map<String, Class> classMap;
     private int capacity;
-    Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     private final Logger logger = LoggerFactory.getLogger(TwoLevelCacheImpl.class);
 
-    public MEMORYCache(int capacity) {
+    MEMORYCache(int capacity) {
         this.capacity = capacity;
         cache = new HashMap<>();
         classMap = new HashMap<>();
@@ -47,14 +44,14 @@ public class MEMORYCache implements Cache {
     public Object getObject(String key) {
         logger.info("получение элемента из Мемори");
         String pathToObject = cache.get(key);
-        try (FileReader reader = new FileReader(pathToObject)) {
-            StringBuilder objectInString = new StringBuilder();
-            int c;
-            while ((c = reader.read()) != -1) {
-                objectInString.append((char) c);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(pathToObject)))) {
+            StringBuilder objectInJson = new StringBuilder();
+            String strLine;
+            while ((strLine = br.readLine()) != null){
+                objectInJson.append(strLine);
             }
-            logger.info(objectInString.toString());
-            return gson.fromJson(objectInString.toString(), classMap.get(key));
+            logger.info(objectInJson.toString());
+            return gson.fromJson(objectInJson.toString(), classMap.get(key));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -69,19 +66,8 @@ public class MEMORYCache implements Cache {
     @Override
     public Object removeObject(String key) {
         logger.info("вытаскивается элемент из Мемори");
-        String pathToObject = cache.get(key);
-        try (FileReader reader = new FileReader(pathToObject)) {
-            StringBuilder objectInString = new StringBuilder();
-            int c;
-            while ((c = reader.read()) != -1) {
-                objectInString.append((char) c);
-            }
-            logger.info(objectInString.toString());
-            Object obj = gson.fromJson(objectInString.toString(), classMap.get(key));
-            return obj;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        try {
+            return getObject(key);
         } finally {
             deleteObject(key);
         }

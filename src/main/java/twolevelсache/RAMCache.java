@@ -13,7 +13,7 @@ public class RAMCache implements Cache {
 
     private final Logger logger = LoggerFactory.getLogger(TwoLevelCacheImpl.class);
 
-    public RAMCache(int capacity) {
+    RAMCache(int capacity) {
         this.capacity = capacity;
         cache = new HashMap<>();
     }
