@@ -6,11 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RAMCacheTest {
-    private RAMCache ramCache;
+    private RAMCache ramCache = new RAMCache(2);
 
     @Before
     public void setUp() {
-        ramCache = new RAMCache(2);
     }
 
     @After

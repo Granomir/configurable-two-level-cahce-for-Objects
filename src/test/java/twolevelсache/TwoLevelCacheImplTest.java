@@ -8,11 +8,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TwoLevelCacheImplTest {
-    private TwoLevelCacheImpl twoLevelCache;
+    private TwoLevelCache twoLevelCache = new TwoLevelCacheImpl(2, 2, "LFU");
 
     @Before
     public void setUp() {
-        twoLevelCache = new TwoLevelCacheImpl(2, 2, "LFU");
     }
 
     @After
