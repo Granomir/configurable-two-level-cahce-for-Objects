@@ -46,9 +46,4 @@ public class LFUAlgorithm implements CachingAlgorithm {
     public synchronized void removeKey(String key) {
         numberOfUsagesMap.remove(key);
     }
-
-    @Override
-    public String getName() {
-        return "LFU";
-    }
 }

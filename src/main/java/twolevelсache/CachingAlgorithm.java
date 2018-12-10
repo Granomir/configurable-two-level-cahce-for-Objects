@@ -7,6 +7,4 @@ public interface CachingAlgorithm {
     String getWeakestKey(Cache... cache);
 
     void removeKey(String key);
-
-    String getName();
 }

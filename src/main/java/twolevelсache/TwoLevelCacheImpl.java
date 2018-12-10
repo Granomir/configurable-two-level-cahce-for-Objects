@@ -26,7 +26,7 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
         }
         ramCache = new RAMCache(RAMCapacity);
         memoryCache = new MEMORYCache(MEMORYCapacity);
-        logger.info("создан кэш с размерами {} и {} и алгоритмом кэширования {}", RAMCapacity, MEMORYCapacity, this.cachingAlgorithm.getName());
+        logger.info("создан кэш с размерами {} и {} и алгоритмом кэширования {}", RAMCapacity, MEMORYCapacity, cachingAlgorithm);
     }
 
     @Override

@@ -43,9 +43,4 @@ public class MRUAlgorithm implements CachingAlgorithm {
     public synchronized void removeKey(String key) {
         lastTimeOfUsageMap.remove(key);
     }
-
-    @Override
-    public String getName() {
-        return "MRU";
-    }
 }
