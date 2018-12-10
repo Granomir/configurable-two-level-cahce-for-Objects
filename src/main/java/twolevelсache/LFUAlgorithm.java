@@ -24,17 +24,19 @@ public class LFUAlgorithm implements CachingAlgorithm {
         }
     }
 
-    public String getWeakestKey(Cache cache) {
+    public String getWeakestKey(Cache... cache) {
 
         String weakestKey = null;
         Long weakestValue = 0L;
-        for (String key : cache.keySet()) {
-            if (weakestKey == null) {
-                weakestKey = key;
-                weakestValue = numberOfUsagesMap.get(key);
-            } else if (numberOfUsagesMap.get(key) < weakestValue) {
-                weakestKey = key;
-                weakestValue = numberOfUsagesMap.get(key);
+        for (Cache cache1 : cache) {
+            for (String key : cache1.keySet()) {
+                if (weakestKey == null) {
+                    weakestKey = key;
+                    weakestValue = numberOfUsagesMap.get(key);
+                } else if (numberOfUsagesMap.get(key) < weakestValue) {
+                    weakestKey = key;
+                    weakestValue = numberOfUsagesMap.get(key);
+                }
             }
         }
         return weakestKey;

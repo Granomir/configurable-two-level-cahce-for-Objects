@@ -21,17 +21,19 @@ public class LRUAlgorithm implements CachingAlgorithm {
         lastTimeOfUsageMap.put(key, System.currentTimeMillis());
     }
 
-    public String getWeakestKey(Cache cache) {
+    public String getWeakestKey(Cache... cache) {
 
         String weakestKey = null;
         Long weakestValue = 0L;
-        for (String key : cache.keySet()) {
-            if (weakestKey == null) {
-                weakestKey = key;
-                weakestValue = lastTimeOfUsageMap.get(key);
-            } else if (lastTimeOfUsageMap.get(key) < weakestValue) {
-                weakestKey = key;
-                weakestValue = lastTimeOfUsageMap.get(key);
+        for (Cache cache1 : cache) {
+            for (String key : cache1.keySet()) {
+                if (weakestKey == null) {
+                    weakestKey = key;
+                    weakestValue = lastTimeOfUsageMap.get(key);
+                } else if (lastTimeOfUsageMap.get(key) < weakestValue) {
+                    weakestKey = key;
+                    weakestValue = lastTimeOfUsageMap.get(key);
+                }
             }
         }
         return weakestKey;

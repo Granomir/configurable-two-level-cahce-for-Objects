@@ -92,13 +92,25 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
             String weakestRamKey = cachingAlgorithm.getWeakestKey(ramCache);
             memoryCache.cacheObject(weakestRamKey, ramCache.removeObject(weakestRamKey));
         } else {
-            logger.info("в Memory нет места");
-            logger.info("Поиск худшего элемента в Memory");
-            String weakestMemoryKey = cachingAlgorithm.getWeakestKey(memoryCache);
-            memoryCache.deleteObject(weakestMemoryKey);
-            cachingAlgorithm.removeKey(weakestMemoryKey);
-            logger.info("в Memory есть место, поиск худшего элемента в RAM для переноса в Memory");
-            makeCrowdingOut();
+            logger.info("в кэше нет места");
+            logger.info("Поиск худшего элемента в кэше");
+            String weakestKey = cachingAlgorithm.getWeakestKey(ramCache, memoryCache);
+            logger.info("Удаление худшего элемента в кэше");
+            this.deleteObject(weakestKey);
+            cachingAlgorithm.removeKey(weakestKey);
+            if (memoryCache.isNotFull()) {
+                logger.info("в Memory есть место, поиск худшего элемента в RAM для переноса в Memory");
+                String weakestRamKey = cachingAlgorithm.getWeakestKey(ramCache);
+                memoryCache.cacheObject(weakestRamKey, ramCache.removeObject(weakestRamKey));
+            }
+        }
+    }
+
+    private void deleteObject(String weakestKey) {
+        if (ramCache.containsObject(weakestKey)) {
+            ramCache.deleteObject(weakestKey);
+        } else {
+            memoryCache.deleteObject(weakestKey);
         }
     }
 }
