@@ -87,23 +87,20 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
 
     private synchronized void makeCrowdingOut() {
         logger.info("начинается вытеснение по выбранному алгоритму");
-        if (memoryCache.isNotFull()) {
-            logger.info("в Memory есть место, поиск худшего элемента в RAM для переноса в Memory");
-            String weakestRamKey = cachingAlgorithm.getWeakestKey(ramCache);
-            memoryCache.cacheObject(weakestRamKey, ramCache.removeObject(weakestRamKey));
-        } else {
+        if (!memoryCache.isNotFull()) {
             logger.info("в кэше нет места");
             logger.info("Поиск худшего элемента в кэше");
             String weakestKey = cachingAlgorithm.getWeakestKey(ramCache, memoryCache);
             logger.info("Удаление худшего элемента в кэше");
             this.deleteObject(weakestKey);
             cachingAlgorithm.removeKey(weakestKey);
-            if (memoryCache.isNotFull()) {
-                logger.info("в Memory есть место, поиск худшего элемента в RAM для переноса в Memory");
-                String weakestRamKey = cachingAlgorithm.getWeakestKey(ramCache);
-                memoryCache.cacheObject(weakestRamKey, ramCache.removeObject(weakestRamKey));
-            }
         }
+        if (memoryCache.isNotFull()) {
+            logger.info("в Memory есть место, поиск худшего элемента в RAM для переноса в Memory");
+            String weakestRamKey = cachingAlgorithm.getWeakestKey(ramCache);
+            memoryCache.cacheObject(weakestRamKey, ramCache.removeObject(weakestRamKey));
+        }
+
     }
 
     private void deleteObject(String weakestKey) {

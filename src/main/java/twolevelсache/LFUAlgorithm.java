@@ -3,8 +3,8 @@ package twolevelсache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LFUAlgorithm implements CachingAlgorithm {
     private Map<String, Long> numberOfUsagesMap;
@@ -12,7 +12,7 @@ public class LFUAlgorithm implements CachingAlgorithm {
     private final Logger logger = LoggerFactory.getLogger(TwoLevelCacheImpl.class);
 
     LFUAlgorithm() {
-        numberOfUsagesMap = new HashMap<>();
+        numberOfUsagesMap = new ConcurrentHashMap<>();
     }
 
     @Override

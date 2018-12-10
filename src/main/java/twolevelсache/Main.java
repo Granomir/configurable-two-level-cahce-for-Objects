@@ -11,19 +11,29 @@ public class Main implements Serializable {
         MyClass obj2 = new MyClass(2, new MyClass1());
         MyClass obj3 = new MyClass(3, new MyClass1());
         twoLevelCache.cacheObject("1", obj1);
-        twoLevelCache.cacheObject("1", new Object());
+        twoLevelCache.cacheObject("4", new Object());
         twoLevelCache.cacheObject("2", obj2);
         twoLevelCache.cacheObject("3", obj3);
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("\n========================================================");
-        MyClass test = (MyClass) twoLevelCache.getObject("1");
-        System.out.println(test);
-        System.out.println(obj1.equals(test));
         twoLevelCache.clear();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        twoLevelCache.cacheObject("1", new Object());
+        twoLevelCache.cacheObject("2", new Object());
+        twoLevelCache.cacheObject("3", new Object());
+        twoLevelCache.cacheObject("4", new Object());
+        System.out.println("\n========================================================");
+//        MyClass test = (MyClass) twoLevelCache.getObject("1");
+//        System.out.println(test);
+//        System.out.println(obj1.equals(test));
+
     }
 
     static class MyClass {

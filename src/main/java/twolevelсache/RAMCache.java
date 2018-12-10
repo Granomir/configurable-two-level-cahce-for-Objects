@@ -3,9 +3,9 @@ package twolevelсache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RAMCache implements Cache {
     private Map<String, Object> cache;
@@ -15,7 +15,7 @@ public class RAMCache implements Cache {
 
     RAMCache(int capacity) {
         this.capacity = capacity;
-        cache = new HashMap<>();
+        cache = new ConcurrentHashMap<>();
     }
 
     @Override

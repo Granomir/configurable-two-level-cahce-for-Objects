@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MEMORYCache implements Cache {
     private Map<String, String> cache;
@@ -23,8 +23,8 @@ public class MEMORYCache implements Cache {
 
     MEMORYCache(int capacity) {
         this.capacity = capacity;
-        cache = new HashMap<>();
-        classMap = new HashMap<>();
+        cache = new ConcurrentHashMap<>();
+        classMap = new ConcurrentHashMap<>();
         try {
             cacheTempFolder = Files.createTempDirectory("cacheTempFolder");
         } catch (IOException e) {
@@ -35,19 +35,42 @@ public class MEMORYCache implements Cache {
         }
     }
 
+//    @Override
+//    public synchronized void cacheObject(String key, Object obj) {
+//        logger.info("начинается кэширование объекта в Memory");
+//        String objectInString = gson.toJson(obj);
+//        logger.info(objectInString);
+//        String pathToObject;
+//        pathToObject = cacheTempFolder.toString() + "\\" + UUID.randomUUID().toString() + ".temp";
+//        cache.put(key, pathToObject);
+//        classMap.put(key, obj.getClass());
+//        try (FileWriter writer = new FileWriter(pathToObject)) {
+//            writer.write(objectInString);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     @Override
     public synchronized void cacheObject(String key, Object obj) {
         logger.info("начинается кэширование объекта в Memory");
         String objectInString = gson.toJson(obj);
         logger.info(objectInString);
-        String pathToObject;
-        pathToObject = cacheTempFolder.toString() + "\\" + UUID.randomUUID().toString() + ".temp";
-        cache.put(key, pathToObject);
-        classMap.put(key, obj.getClass());
-        try (FileWriter writer = new FileWriter(pathToObject)) {
-            writer.write(objectInString);
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile(UUID.randomUUID().toString(), ".javatemp", cacheTempFolder.toFile());
+            tempFile.deleteOnExit();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if (tempFile != null) {
+            cache.put(key, tempFile.getPath());
+            classMap.put(key, obj.getClass());
+            try (FileWriter writer = new FileWriter(tempFile)) {
+                writer.write(objectInString);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -58,7 +81,7 @@ public class MEMORYCache implements Cache {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(pathToObject)))) {
             StringBuilder objectInJson = new StringBuilder();
             String strLine;
-            while ((strLine = br.readLine()) != null){
+            while ((strLine = br.readLine()) != null) {
                 objectInJson.append(strLine);
             }
             logger.info(objectInJson.toString());
@@ -100,8 +123,8 @@ public class MEMORYCache implements Cache {
 
     @Override
     public synchronized void clear() {
-        for (Map.Entry<String, String> entry : cache.entrySet()) {
-            File deletingFile = new File(entry.getValue());
+        for (String key : cache.keySet()) {
+            deleteObject(key);
         }
         cache.clear();
         classMap.clear();

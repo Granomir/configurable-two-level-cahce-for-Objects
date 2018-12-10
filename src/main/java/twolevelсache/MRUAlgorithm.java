@@ -3,8 +3,8 @@ package twolevelсache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MRUAlgorithm implements CachingAlgorithm {
 
@@ -13,7 +13,7 @@ public class MRUAlgorithm implements CachingAlgorithm {
     private final Logger logger = LoggerFactory.getLogger(TwoLevelCacheImpl.class);
 
     MRUAlgorithm() {
-        lastTimeOfUsageMap = new HashMap<>();
+        lastTimeOfUsageMap = new ConcurrentHashMap<>();
     }
 
     @Override
