@@ -52,7 +52,7 @@ public class MEMORYCache implements Cache {
 //    }
 
     @Override
-    public synchronized void cacheObject(String key, Object obj) {
+    public void cacheObject(String key, Object obj) {
         logger.info("начинается кэширование объекта в Memory");
         String objectInString = gson.toJson(obj);
         logger.info(objectInString);
@@ -98,7 +98,7 @@ public class MEMORYCache implements Cache {
     }
 
     @Override
-    public synchronized Object removeObject(String key) {
+    public Object removeObject(String key) {
         logger.info("вытаскивается элемент из Мемори");
         try {
             return getObject(key);
@@ -108,7 +108,7 @@ public class MEMORYCache implements Cache {
     }
 
     @Override
-    public synchronized boolean deleteObject(String key) {
+    public boolean deleteObject(String key) {
         logger.info("удаляется элемент из Мемори");
         String pathToObject = cache.remove(key);
         classMap.remove(key);
@@ -122,7 +122,7 @@ public class MEMORYCache implements Cache {
     }
 
     @Override
-    public synchronized void clear() {
+    public void clear() {
         for (String key : cache.keySet()) {
             deleteObject(key);
         }

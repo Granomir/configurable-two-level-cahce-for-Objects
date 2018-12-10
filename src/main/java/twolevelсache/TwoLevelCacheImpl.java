@@ -92,7 +92,7 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
             logger.info("Поиск худшего элемента в кэше");
             String weakestKey = cachingAlgorithm.getWeakestKey(ramCache, memoryCache);
             logger.info("Удаление худшего элемента в кэше");
-            this.deleteObject(weakestKey);
+            deleteObject(weakestKey);
             cachingAlgorithm.removeKey(weakestKey);
         }
         if (memoryCache.isNotFull()) {
