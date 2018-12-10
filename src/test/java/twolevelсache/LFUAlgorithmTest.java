@@ -1,16 +1,15 @@
 package twolevelсache;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class LFUAlgorithmTest {
-    TwoLevelCache twoLevelCache = new TwoLevelCacheImpl(1, 1, "LFU");
+    private TwoLevelCache twoLevelCache = new TwoLevelCacheImpl(1, 1, "LFU");
 
     @Test
-    public void getWeakestKey() throws SpecifiedKeyExistsException {
+    public void getWeakestKey() {
         twoLevelCache.cacheObject("1", new MyClass1(new MyClass2(1), 2));
         twoLevelCache.cacheObject("2", new MyClass1(new MyClass2(1), 2));
         twoLevelCache.getObject("2");

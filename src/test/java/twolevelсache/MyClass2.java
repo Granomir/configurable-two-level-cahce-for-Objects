@@ -3,7 +3,7 @@ package twolevelсache;
 import java.util.Objects;
 
 public class MyClass2 {
-    int i;
+    private int i;
 
     @Override
     public boolean equals(Object o) {
@@ -18,7 +18,7 @@ public class MyClass2 {
         return Objects.hash(i);
     }
 
-    public MyClass2(int i) {
+    MyClass2(int i) {
         this.i = i;
     }
 }

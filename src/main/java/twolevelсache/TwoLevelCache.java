@@ -2,7 +2,7 @@ package twolevelсache;
 
 public interface TwoLevelCache {
 
-    void cacheObject(String key, Object obj) throws SpecifiedKeyExistsException;
+    void cacheObject(String key, Object obj);
 
     Object getObject(String key);
 

@@ -30,7 +30,7 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
     }
 
     @Override
-    public synchronized void cacheObject(String key, Object obj) throws SpecifiedKeyExistsException {
+    public synchronized void cacheObject(String key, Object obj) {
         logger.info("начинается кэширование объекта");
         if (!ramCache.containsObject(key) & !memoryCache.containsObject(key)) {
             logger.info("в кэше еще нет такого ключа");
@@ -45,7 +45,27 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
                 cachingAlgorithm.grabKey(key);
             }
         } else {
-            throw new SpecifiedKeyExistsException("Specified key already exists in cache.");
+            logger.info("в кэше уже есть такой ключ, будет выполнено обновление привязанного к нему объекта");
+            cachingAlgorithm.removeKey(key);
+            if (ramCache.containsObject(key)) {
+                logger.info("ключ нашелся в RAM");
+                ramCache.cacheObject(key, obj);
+                logger.info("объект обновлен");
+                cachingAlgorithm.grabKey(key);
+            } else {
+                logger.info("ключ нашелся в Memory и переносится в RAM");
+                memoryCache.removeObject(key);
+                if (ramCache.isNotFull()) {
+                    logger.info("в RAM есть место");
+                    ramCache.cacheObject(key, obj);
+                    logger.info("объект обновлен");
+                } else {
+                    logger.info("в RAM нет места");
+                    makeCrowdingOut();
+                    ramCache.cacheObject(key, obj);
+                }
+                cachingAlgorithm.grabKey(key);
+            }
         }
     }
 

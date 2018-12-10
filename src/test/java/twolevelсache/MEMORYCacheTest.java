@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class MEMORYCacheTest {
-    private MEMORYCache memoryCache = new MEMORYCache(2);;
+    private MEMORYCache memoryCache = new MEMORYCache(2);
 
     @Before
     public void setUp() {

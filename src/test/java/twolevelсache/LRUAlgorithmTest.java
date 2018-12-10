@@ -5,10 +5,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class LRUAlgorithmTest {
-    TwoLevelCache twoLevelCache = new TwoLevelCacheImpl(1, 1, "LRU");
+    private TwoLevelCache twoLevelCache = new TwoLevelCacheImpl(1, 1, "LRU");
 
     @Test
-    public void getWeakestKey() throws SpecifiedKeyExistsException {
+    public void getWeakestKey() {
         twoLevelCache.cacheObject("1", new MyClass1(new MyClass2(1), 2));
         assertNotNull(twoLevelCache.getObject("1"));
         twoLevelCache.cacheObject("2", new MyClass1(new MyClass2(1), 2));
