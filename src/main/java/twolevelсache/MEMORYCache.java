@@ -102,7 +102,6 @@ public class MEMORYCache implements Cache {
     public synchronized void clear() {
         for (Map.Entry<String, String> entry : cache.entrySet()) {
             File deletingFile = new File(entry.getValue());
-            System.out.println(deletingFile.delete());
         }
         cache.clear();
         classMap.clear();

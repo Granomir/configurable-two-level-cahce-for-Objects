@@ -32,7 +32,7 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
     @Override
     public synchronized void cacheObject(String key, Object obj) throws SpecifiedKeyExistsException {
         logger.info("начинается кэширование объекта");
-        if (!ramCache.containsObject(key) || !memoryCache.containsObject(key)) {
+        if (!ramCache.containsObject(key) & !memoryCache.containsObject(key)) {
             logger.info("в кэше еще нет такого ключа");
             if (ramCache.isNotFull()) {
                 logger.info("в RAM есть место");
@@ -78,6 +78,11 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
     public void clear() {
         ramCache.clear();
         memoryCache.clear();
+    }
+
+    @Override
+    public int getSize() {
+        return ramCache.getSize() + memoryCache.getSize();
     }
 
     private synchronized void makeCrowdingOut() {

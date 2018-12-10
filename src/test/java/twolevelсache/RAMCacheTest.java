@@ -69,7 +69,7 @@ public class RAMCacheTest {
     public void clear() {
         ramCache.cacheObject("1", new Object());
         Assert.assertEquals(1, ramCache.getSize());
-        ramCache.removeObject("1");
+        ramCache.clear();
         Assert.assertEquals(0, ramCache.getSize());
     }
 }

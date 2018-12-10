@@ -7,4 +7,6 @@ public interface TwoLevelCache {
     Object getObject(String key);
 
     void clear();
+
+    int getSize();
 }

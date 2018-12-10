@@ -11,6 +11,7 @@ public class Main implements Serializable {
         MyClass obj2 = new MyClass(2, new MyClass1());
         MyClass obj3 = new MyClass(3, new MyClass1());
         twoLevelCache.cacheObject("1", obj1);
+        twoLevelCache.cacheObject("1", new Object());
         twoLevelCache.cacheObject("2", obj2);
         twoLevelCache.cacheObject("3", obj3);
         try {
@@ -22,7 +23,6 @@ public class Main implements Serializable {
         MyClass test = (MyClass) twoLevelCache.getObject("1");
         System.out.println(test);
         System.out.println(obj1.equals(test));
-//        System.out.println(test);
         twoLevelCache.clear();
     }
 

@@ -72,7 +72,7 @@ public class MEMORYCacheTest {
     public void clear() {
         memoryCache.cacheObject("1", new Object());
         assertEquals(1, memoryCache.getSize());
-        memoryCache.removeObject("1");
+        memoryCache.clear();
         assertEquals(0, memoryCache.getSize());
     }
 }
