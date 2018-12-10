@@ -16,7 +16,7 @@ public class LFUAlgorithm implements CachingAlgorithm {
     }
 
     @Override
-    public void grabKey(String key) {
+    public synchronized void grabKey(String key) {
         if (numberOfUsagesMap.containsKey(key)) {
             numberOfUsagesMap.put(key, numberOfUsagesMap.get(key) + 1);
         } else {
@@ -41,7 +41,7 @@ public class LFUAlgorithm implements CachingAlgorithm {
     }
 
     @Override
-    public void removeKey(String key) {
+    public synchronized void removeKey(String key) {
         numberOfUsagesMap.remove(key);
     }
 

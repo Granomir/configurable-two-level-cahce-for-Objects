@@ -17,7 +17,7 @@ public class LRUAlgorithm implements CachingAlgorithm {
     }
 
     @Override
-    public void grabKey(String key) {
+    public synchronized void grabKey(String key) {
         lastTimeOfUsageMap.put(key, System.currentTimeMillis());
     }
 
@@ -38,7 +38,7 @@ public class LRUAlgorithm implements CachingAlgorithm {
     }
 
     @Override
-    public void removeKey(String key) {
+    public synchronized void removeKey(String key) {
         lastTimeOfUsageMap.remove(key);
     }
 

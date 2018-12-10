@@ -30,11 +30,13 @@ public class MEMORYCache implements Cache {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        cacheTempFolder.toFile().deleteOnExit();
+        if (cacheTempFolder != null) {
+            cacheTempFolder.toFile().deleteOnExit();
+        }
     }
 
     @Override
-    public void cacheObject(String key, Object obj) {
+    public synchronized void cacheObject(String key, Object obj) {
         logger.info("начинается кэширование объекта в Memory");
         String objectInString = gson.toJson(obj);
         logger.info(objectInString);
@@ -42,7 +44,7 @@ public class MEMORYCache implements Cache {
         pathToObject = cacheTempFolder.toString() + "\\" + UUID.randomUUID().toString() + ".temp";
         cache.put(key, pathToObject);
         classMap.put(key, obj.getClass());
-        try (FileWriter writer = new FileWriter(pathToObject, false)) {
+        try (FileWriter writer = new FileWriter(pathToObject)) {
             writer.write(objectInString);
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,7 +75,7 @@ public class MEMORYCache implements Cache {
     }
 
     @Override
-    public Object removeObject(String key) {
+    public synchronized Object removeObject(String key) {
         logger.info("вытаскивается элемент из Мемори");
         try {
             return getObject(key);
@@ -83,7 +85,7 @@ public class MEMORYCache implements Cache {
     }
 
     @Override
-    public boolean deleteObject(String key) {
+    public synchronized boolean deleteObject(String key) {
         logger.info("удаляется элемент из Мемори");
         String pathToObject = cache.remove(key);
         classMap.remove(key);
@@ -97,7 +99,7 @@ public class MEMORYCache implements Cache {
     }
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         for (Map.Entry<String, String> entry : cache.entrySet()) {
             File deletingFile = new File(entry.getValue());
             System.out.println(deletingFile.delete());

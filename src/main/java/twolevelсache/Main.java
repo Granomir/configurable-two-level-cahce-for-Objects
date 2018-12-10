@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Main implements Serializable {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SpecifiedKeyExistsException {
         TwoLevelCache twoLevelCache = new TwoLevelCacheImpl(2, 2, "LFU");
         MyClass obj1 = new MyClass(1, new MyClass1());
         System.out.println(obj1);

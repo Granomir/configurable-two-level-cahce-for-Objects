@@ -7,6 +7,8 @@ When you put object into cache (also passing a key, which will let you to get th
 If there is no empty place for new object in 1 level, the weakest object (according to the selected caching algorithm)  
 from 1 level will be moved to 2 level. After that, the new object will get into 1 level.
 
+If specified key already exists in the cache, it will throw SpecifiedKeyExistsException.
+
 When you try to get an object from cache and it is located in 2 level, it would be moved to 1 level firstly and then handed to you.
 
 The rules, described above, let to keep more popular objects in 1 level of cache, which works faster (RAM memory).

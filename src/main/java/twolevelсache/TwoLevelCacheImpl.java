@@ -30,7 +30,7 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
     }
 
     @Override
-    public void cacheObject(String key, Object obj) {
+    public synchronized void cacheObject(String key, Object obj) throws SpecifiedKeyExistsException {
         logger.info("начинается кэширование объекта");
         if (!ramCache.containsObject(key) || !memoryCache.containsObject(key)) {
             logger.info("в кэше еще нет такого ключа");
@@ -44,12 +44,13 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
                 ramCache.cacheObject(key, obj);
                 cachingAlgorithm.grabKey(key);
             }
+        } else {
+            throw new SpecifiedKeyExistsException("Specified key already exists in cache.");
         }
-        //ToDo - если такой ключ уже есть то перезапись или исключение?
     }
 
     @Override
-    public Object getObject(String key) {
+    public synchronized Object getObject(String key) {
         logger.info("начинается получение объекта из кэша");
         if (ramCache.containsObject(key)) {
             logger.info("объект нашелся в RAM");
@@ -58,8 +59,6 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
         }
         if (memoryCache.containsObject(key)) {
             logger.info("объект нашелся в Memory и переносится в RAM");
-//            int countOfUsage = memoryCache.getCountOfHits(key);
-//            long lastTimeOfUsage = memoryCache.getLastTimeOfHit(key);
             Object obj = memoryCache.removeObject(key);
             if (ramCache.isNotFull()) {
                 logger.info("в RAM есть место");
@@ -81,7 +80,7 @@ public class TwoLevelCacheImpl implements TwoLevelCache {
         memoryCache.clear();
     }
 
-    private void makeCrowdingOut() {
+    private synchronized void makeCrowdingOut() {
         logger.info("начинается вытеснение по выбранному алгоритму");
         if (memoryCache.isNotFull()) {
             logger.info("в Memory есть место, поиск худшего элемента в RAM для переноса в Memory");

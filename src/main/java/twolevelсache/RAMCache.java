@@ -19,7 +19,7 @@ public class RAMCache implements Cache {
     }
 
     @Override
-    public void cacheObject(String key, Object obj) {
+    public synchronized void cacheObject(String key, Object obj) {
         logger.info("начинается кэширование объекта в RAM");
         cache.put(key, obj);
     }
@@ -36,7 +36,7 @@ public class RAMCache implements Cache {
     }
 
     @Override
-    public Object removeObject(String key) {
+    public synchronized Object removeObject(String key) {
         logger.info("вытаскивается объект из RAM");
         return cache.remove(key);
     }
@@ -54,7 +54,7 @@ public class RAMCache implements Cache {
     }
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         cache.clear();
     }
 
