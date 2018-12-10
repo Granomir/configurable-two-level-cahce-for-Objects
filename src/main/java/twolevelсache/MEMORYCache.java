@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +16,7 @@ public class MEMORYCache implements Cache {
     private Map<String, String> cache;
     private Map<String, Class> classMap;
     private int capacity;
+    private Path cacheTempFolder;
     private Gson gson = new Gson();
 
     private final Logger logger = LoggerFactory.getLogger(TwoLevelCacheImpl.class);
@@ -22,6 +25,12 @@ public class MEMORYCache implements Cache {
         this.capacity = capacity;
         cache = new HashMap<>();
         classMap = new HashMap<>();
+        try {
+            cacheTempFolder = Files.createTempDirectory("cacheTempFolder");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        cacheTempFolder.toFile().deleteOnExit();
     }
 
     @Override
@@ -30,7 +39,7 @@ public class MEMORYCache implements Cache {
         String objectInString = gson.toJson(obj);
         logger.info(objectInString);
         String pathToObject;
-        pathToObject = "tempCache\\" + UUID.randomUUID().toString() + ".temp";
+        pathToObject = cacheTempFolder.toString() + "\\" + UUID.randomUUID().toString() + ".temp";
         cache.put(key, pathToObject);
         classMap.put(key, obj.getClass());
         try (FileWriter writer = new FileWriter(pathToObject, false)) {
